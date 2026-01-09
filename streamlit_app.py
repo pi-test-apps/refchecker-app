@@ -26,7 +26,7 @@ def _extract_text(uploaded_file) -> str:
 
     suffix = Path(uploaded_file.name).suffix.lower()
     if suffix not in ALLOWED_SUFFIXES:
-        raise ValueError("Unsupported file type. Please upload a .txt or .docx file.")
+        raise ValueError("Unsupported file type. Please upload a .txt, .pdf or .docx file.")
 
     content = uploaded_file.read()
     if suffix == ".txt":
@@ -54,10 +54,10 @@ def _build_report(text: str) -> dict:
 
 def main() -> None:
     st.set_page_config(page_title="Reference Checker", page_icon="📑", layout="wide")
-    st.title("Reference Checker (Streamlit)")
-    st.write("Upload a .txt or .docx manuscript. We'll extract in-text citations, parse the reference list, and highlight gaps.")
+    st.title("Academic Paper Reference Checker")
+    st.write("Upload a .txt, .pdf or .docx manuscript. We'll verify the accuracy of references by comparing cited information against authoritative sources")
 
-    uploaded = st.file_uploader("Choose a .txt or .docx file", type=["txt", "docx"])
+    uploaded = st.file_uploader("Choose a .txt, .pdf or .docx file", type=["txt", "pdf", "docx"])
 
     if uploaded and st.button("Run check"):
         try:
@@ -71,23 +71,36 @@ def main() -> None:
 
     report = st.session_state.get("report")
     if report:
-        cols = st.columns(4)
-        cols[0].metric("Total citations", report["total_citations"])
-        cols[1].metric("Total references", report["total_references"])
-        cols[2].metric("Missing in reference list", len(report["missing_in_references"]), delta=None)
-        cols[3].metric("Unused in text", len(report["unused_in_text"]), delta=None)
+        cols = st.columns(5)
+        cols[0].metric("Total references", report["total_references"])
+        cols[1].metric("Errors", len(report["errors"]), delta=None)
+        cols[2].metric("Warnings", len(report["warnings"]), delta=None)
+        cols[3].metric("Improvings", len(report["improvings"]), delta=None)
+        cols[4].metric("Not verified", len(report["missing"]), delta=None)
 
-        st.subheader("Missing in reference list")
-        if report["missing_in_references"]:
-            st.write(report["missing_in_references"])
+        st.subheader("Errors")
+        if report["errors"]:
+            st.write(report["errors"])
         else:
-            st.write("All citations have matching references.")
-
-        st.subheader("Unused in text")
-        if report["unused_in_text"]:
-            st.write(report["unused_in_text"])
+            st.write("No errors detected.")
+            
+        st.subheader("Warnings in reference list")
+        if report["warnings"]:
+            st.write(report["warnings"])
         else:
-            st.write("No unused references.")
+            st.write("No warnings.")
+            
+        st.subheader("Improvings")
+        if report["improvings"]:
+            st.write(report["improvings"])
+        else:
+            st.write("No improvings.")
+            
+        st.subheader("Not verified")
+        if report["missing"]:
+            st.write(report["missing"])
+        else:
+            st.write("All references were verified.")
 
         st.subheader("Preview (first 500 chars of text)")
         st.code(report.get("preview", ""), language="text")
