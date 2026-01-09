@@ -43,3 +43,8 @@ mypy>=0.910
 # Documentation dependencies
 sphinx>=4.0.0
 sphinx-rtd-theme>=0.5.0
+
+# Added
+python-docx>=1.1.0,<2.0.0
+python-multipart>=0.0.7,<1.0.0
+streamlit>=1.40.0,<2.0.0

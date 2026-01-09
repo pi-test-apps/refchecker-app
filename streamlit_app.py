@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 from refchecker.core.refchecker import main
 
 
-ALLOWED_SUFFIXES = {".txt", ".docx"}
+ALLOWED_SUFFIXES = {".txt", ".docx", ".pdf"}
 
 
 def _extract_text(uploaded_file) -> str:
