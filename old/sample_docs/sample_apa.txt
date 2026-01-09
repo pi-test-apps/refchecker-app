@@ -1,0 +1,12 @@
+﻿This manuscript cites Smith (2020), Lopez (2019), and collaborative work (Garcia & Patel, 2021).
+Follow-up findings from Morgan et al. (2018) and Chen (2020a) are discussed alongside Davis et al. (2017).
+An outstanding claim from Taylor (2022) remains unverified.
+
+References
+Smith, J. (2020). Article title. Journal Name, 1(1), 1-10.
+Lopez, M. (2019). Another study. Conference Proceedings, 2(3), 20-30.
+Garcia, L., & Patel, R. (2021). Collaborative work. Journal Name, 3(2), 40-50.
+Morgan, A., Lee, S., & Brown, T. (2018). Team research. Journal Name, 4(1), 60-70.
+Chen, Q. (2020a). Follow-up work. Journal Name, 5(2), 80-90.
+Davis, P., Johnson, L., & Clark, S. (2017). Multi-author study. Journal Name, 6(3), 100-110.
+Unused, A. (2016). Uncited reference. Journal Name, 7(4), 120-130.

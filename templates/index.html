@@ -1,0 +1,30 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Academic Paper Reference Checker</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="panel">
+      <div class="header">
+        <div>
+          <p class="eyebrow">https://github.com/markrussinovich/refchecker</p>
+          <h1>Academic Paper Reference Checker</h1>
+          <p>Upload a document to verify the accuracy of references by comparing cited information against authoritative sources.</p>
+        </div>
+      </div>
+      <form class="upload" action="/check" method="post" enctype="multipart/form-data">
+        <label class="field" for="file">Choose a .txt, .pdf or .docx file</label>
+        <input id="file" name="file" type="file" accept=".txt,.pdf,.docx" required />
+        <div class="actions">
+          <button type="submit">Run check</button>
+          <p class="hint">We only keep the last run in memory</p>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

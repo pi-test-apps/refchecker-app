@@ -1,0 +1,54 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Academic Paper Reference Checker</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="panel">
+      <div class="header">
+        <div>
+          <p class="eyebrow">Results</p>
+          <h1>Reference report</h1>
+          <p>References analyzed and summary.</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat">
+          <p class="label">Processing</p>
+          <p class="value">{{ report.processing }}</p>
+        </div>
+      </div>
+
+      <div class="lists">
+        <div class="list-block">
+          <h2>References</h2>
+          {% if report.references %}
+            <ul>
+              {% for item in report.references %}
+                <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="empty">No references detected.</p>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat">
+          <p class="label">Summary</p>
+          <p class="value">{{ report.summary }}</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <a class="ghost" href="/">Run another file</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
