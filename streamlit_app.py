@@ -3640,7 +3640,7 @@ def _verify_references_sequential(paper, bibliography, paper_errors, error_types
         raw_text = reference.get('raw_text', '')
         match = re.match(r'\[(\d+)\]', raw_text)
         ref_num = match.group(1) if match else str(i + 1)
-        st.subheader(f"[{ref_num}/{len(bibliography)}] {title}", divider=False)
+        st.markdown(f"**[{ref_num}/{len(bibliography)}] {title}**")
         if authors:
             st.markdown(f" * {authors}")
         if venue:
