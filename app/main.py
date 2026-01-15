@@ -1,22 +1,21 @@
 ﻿from io import BytesIO
 from pathlib import Path
 from typing import Any, Optional
-
 from docx import Document
 from fastapi import File, FastAPI, HTTPException, Request, UploadFile, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
 from app.extractors import extract_apa_citations, extract_reference_entries
 from app.matcher import build_report
+import pypdf
 
 app = FastAPI(title="Reference Checker")
 
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-ALLOWED_SUFFIXES = {".txt", ".docx"}
+ALLOWED_SUFFIXES = {".pdf", ".txt", ".tex"}
 _last_report: dict[str, Any] | None = None
 
 
@@ -44,7 +43,7 @@ async def _extract_text(file: Optional[UploadFile]) -> str:
 
     suffix = Path(file.filename).suffix.lower()
     if suffix not in ALLOWED_SUFFIXES:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Unsupported file type. Please upload a .txt or .docx file.")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Unsupported file type. Please upload a .pdf, .txt or .tex file.")
 
     try:
         content = await file.read()
@@ -53,15 +52,25 @@ async def _extract_text(file: Optional[UploadFile]) -> str:
 
     if suffix == ".txt":
         text = content.decode("utf-8", errors="ignore")
-    else:
+    if suffix == ".docx":
         try:
             document = Document(BytesIO(content))
             text = "\n".join(paragraph.text for paragraph in document.paragraphs)
         except Exception as exc:  # pragma: no cover - defensive guard
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not process .docx file.") from exc
-
+    if suffix == ".tex":
+        text = content.decode("utf-8", errors="ignore")
+    if suffix == ".pdf":
+        pdf_content = BytesIO(content)
+        # Try with pypdf first
+        text = ""
+        pdf_content.seek(0)  # Reset file pointer
+        pdf_reader = pypdf.PdfReader(pdf_content)
+        
+        for page_num in range(len(pdf_reader.pages)):
+            page = pdf_reader.pages[page_num]
+            text += page.extract_text() + "\n"
     return text
-
 
 @app.post("/upload")
 async def upload_file(file: Optional[UploadFile] = File(None)) -> dict[str, str | int]:

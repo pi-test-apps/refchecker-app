@@ -5230,7 +5230,7 @@ class ArxivReferenceChecker:
         logger.debug(f"Extracted {len(references)} references with arxiv links for {paper_id}")
         
         return references
-    
+        
     
     def normalize_text(self, text):
         """
